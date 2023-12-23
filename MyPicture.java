@@ -29,20 +29,35 @@ public class MyPicture extends JPanel {
         BufferedImage buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = buffer.createGraphics();
 
-        int x[] = { 590, 250, 1, 450, 299, 299, 448, 48, 150, 598 };
-        int y[] = { 200, 250, 1, 150, 299, 450, 448, 330, 510, 598 };
+        g2.setColor(Color.WHITE);
+        g2.fillRect(0, 0, WIDTH, HEIGHT);
 
-        for (int i = 0; i < 10; i++) {
+        int xPoly[] = { 150, 250, 325, 375, 400, 275, 100 };
+        int yPoly[] = { 150, 100, 125, 225, 325, 375, 300 };
+        Polygon poly = new Polygon(xPoly, yPoly, xPoly.length);
+        g2.setColor(Color.BLACK);
+        g2.drawPolygon(poly);
 
-            g2.setColor(randomColor[i]);
-            // plot(g, x[i], y[i]);
-            // line(g, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10]);
-            bezier(g2, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10], x[(i + 2) % 10],
-                    y[(i + 2) % 10], x[(i + 3) % 10], y[(i + 3) % 10]);
-        }
+        line(g2, 0, 0, 0, HEIGHT);
+        line(g2, 0, 0, WIDTH, 0);
+        line(g2, HEIGHT - 1, 0, WIDTH - 1, HEIGHT);
+        line(g2, 0, HEIGHT - 1, WIDTH, HEIGHT - 1);
+        // g.drawImage(buffer, 0, 0, null);
 
+        // int x[] = { 590, 250, 1, 450, 299, 299, 448, 48, 150, 598 };
+        // int y[] = { 200, 250, 1, 150, 299, 450, 448, 330, 510, 598 };
+// 
+        // for (int i = 0; i < 10; i++) {
+// 
+        //     g2.setColor(randomColor[i]);
+        //     // plot(g, x[i], y[i]);
+        //     // line(g, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10]);
+        //     bezier(g2, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10], x[(i + 2) % 10],
+        //             y[(i + 2) % 10], x[(i + 3) % 10], y[(i + 3) % 10]);
+        // }
+// 
         buffer = floodFill(buffer, 100, 50, Color.white, Color.red);
-        buffer = floodFill(buffer, 100, 100, Color.white, Color.blue);
+        // buffer = floodFill(buffer, 100, 100, Color.white, Color.blue);
 
         g.drawImage(buffer, 0, 0, null);
 
@@ -61,7 +76,7 @@ public class MyPicture extends JPanel {
                     + (3 * Math.pow(t, 2) * (1 - t) * x3) + (Math.pow(t, 3) * x4);
             double y = (Math.pow(1 - t, 3) * y1) + (3 * t * Math.pow(1 - t, 2) * y2)
                     + (3 * Math.pow(t, 2) * (1 - t) * y3) + (Math.pow(t, 3) * y4);
-            plot(g, (int) x, (int) y);
+            plot(g, (int) x, (int) y, 1);
         }
     }
 
@@ -71,6 +86,7 @@ public class MyPicture extends JPanel {
         Queue<Point> q = new LinkedList<>();
 
         if (m.getRGB(x, y) == target_colour.getRGB()) {
+            System.out.println("true");
             g2.setColor(replacement_colour);
             plot(g2, x, y, 1);
             q.add(new Point(x, y));
@@ -79,7 +95,7 @@ public class MyPicture extends JPanel {
         while (!q.isEmpty()) {
             Point p = q.poll();
 
-            if (p.y < HEIGHT && m.getRGB(p.x, p.y + 1) == target_colour.getRGB()) {
+            if (p.y < 600 && m.getRGB(p.x, p.y + 1) == target_colour.getRGB()) {
                 g2.setColor(replacement_colour);
                 plot(g2, p.x, p.y + 1, 1);
                 q.add(new Point(p.x, p.y + 1));
@@ -89,7 +105,7 @@ public class MyPicture extends JPanel {
                 plot(g2, p.x, p.y - 1, 1);
                 q.add(new Point(p.x, p.y - 1));
             }
-            if (p.x < WIDTH && m.getRGB(p.x + 1, p.y) == target_colour.getRGB()) {
+            if (p.x < 600 && m.getRGB(p.x + 1, p.y) == target_colour.getRGB()) {
                 g2.setColor(replacement_colour);
                 plot(g2, p.x + 1, p.y, 1);
                 q.add(new Point(p.x + 1, p.y));
