@@ -51,10 +51,12 @@ public class MyPicture extends JPanel {
         // }
         //
         g2.setColor(Color.PINK);
-        heart(g2, 0, 0, 30);
+        heart(g2, 100, 100, 10);
 
         // circle(g2, 100, 310, 40);
-        circleMidpoint(g2, 100, 310, 40);
+        midpointCircle(g2, 100, 310, 40);
+
+        midpointEllipse(g2, 300, 200, 80, 40);
 
         // buffer = floodFill(buffer, 100, 50, Color.white, Color.red);
         // buffer = floodFill(buffer, 500, 500, Color.white, Color.blue);
@@ -63,25 +65,18 @@ public class MyPicture extends JPanel {
 
     }
 
-    public void heart(Graphics g, int x, int y, int size) {
-
-        // curve(g, 2 * size, 4 * size, 2 * size, 3 * size, 4 * size, 2 * size, 4 *
-        // size, 4 * size);
-        // curve(g, 200, 200, 200, 100, 300, 150, 300, 200);
-        // curve(g, 200, 300, 200, 250, 100, 250, 100, 200);
-        // curve(g, 200, 300, 200, 250, 300, 250, 300, 200);
-
-        curve(g, x + size * 2, y + size * 4, x + size * 2, y + size * 3, x + size * 4, y + size * 3, x + size * 4,
-                y + size * 4);
-        curve(g, x + size * 4, y + size * 4, x + size * 4, y + size * 3, x + size * 6, y + size * 3, x + size * 6,
-                y + size * 4);
-        curve(g, x + size * 4, y + size * 6, x + size * 4, y + size * 5, x + size * 2, y + size * 5, x + size * 2,
-                y + size * 4);
-        curve(g, x + size * 4, y + size * 6, x + size * 4, y + size * 5, x + size * 6, y + size * 5, x + size * 6,
-                y + size * 4);
+    public void star(Graphics g, int x, int y, int size) {
+        
     }
 
-    public void circleMidpoint(Graphics g, int xc, int yc, int r) {
+    public void heart(Graphics g, int x, int y, int size) {
+        curve(g, x, y, x, y - 1 * size, x - 2 * size, y - 1 * size, x - 2 * size, y);
+        curve(g, x, y, x, y - 1 * size, x + 2 * size, y - 1 * size, x + 2 * size, y);
+        curve(g, x, y + 2 * size, x, y + 1 * size, x + 2 * size, y + 1 * size, x + 2 * size, y);
+        curve(g, x, y + 2 * size, x, y + 1 * size, x - 2 * size, y + 1 * size, x - 2 * size, y);
+    }
+
+    public void midpointCircle(Graphics g, int xc, int yc, int r) {
         int x = 0;
         int y = r;
         int d = 1 - r;
@@ -105,9 +100,59 @@ public class MyPicture extends JPanel {
         }
     }
 
+    public void midpointEllipse(Graphics g, int xc, int yc, int a, int b) {
+        int a2 = a * a, b2 = b * b;
+        int twoA2 = 2 * a2, twoB2 = 2 * b2;
+
+        // region 1
+        int x = 0;
+        int y = b;
+        int D = (int) (b2 - a2 * b + a2 / 4);
+        int Dx = 0, Dy = twoA2 * y;
+
+        while (Dx <= Dy) {
+            plot(g, x + xc, y + yc, 1);
+            plot(g, -x + xc, y + yc, 1);
+            plot(g, x + xc, -y + yc, 1);
+            plot(g, -x + xc, -y + yc, 1);
+
+            x++;
+            Dx = Dx + twoB2;
+            D = D + Dx + b2;
+
+            if (D >= 0) {
+                y--;
+                Dy = Dy - twoA2;
+                D = D - Dy;
+            }
+        }
+
+        // region 2
+        x = a;
+        y = 0;
+        D = (int) (a2 - b2 * a + b2 / 4);
+        Dx = twoB2 * x;
+        Dy = 0;
+
+        while (Dx >= Dy) {
+            plot(g, x + xc, y + yc, 1);
+            plot(g, -x + xc, y + yc, 1);
+            plot(g, x + xc, -y + yc, 1);
+            plot(g, -x + xc, -y + yc, 1);
+
+            y++;
+            Dy += twoA2;
+            D = D + Dy - a2;
+
+            if (D >= 0) {
+                x--;
+                Dx -= twoB2;
+                D -= Dx;
+            }
+        }
+    }
+
     public void curve(Graphics g, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
-        // g.drawArc(x, y, width, height, sttang, arcang);
-        // drawArc(g, x, y, width, height, sttang, arcang)
         bezier(g, x1, y1, x2, y2, x3, y3, x4, y4);
     }
 
