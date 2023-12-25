@@ -32,40 +32,83 @@ public class MyPicture extends JPanel {
         g2.setColor(Color.WHITE);
         g2.fillRect(0, 0, WIDTH, HEIGHT);
 
-        int xPoly[] = { 150, 250, 325, 375, 400, 275, 100 };
-        int yPoly[] = { 150, 100, 125, 225, 325, 375, 300 };
-        Polygon poly = new Polygon(xPoly, yPoly, xPoly.length);
         g2.setColor(Color.BLACK);
-        g2.drawPolygon(poly);
-
         line(g2, 0, 0, 0, HEIGHT);
         line(g2, 0, 0, WIDTH, 0);
         line(g2, HEIGHT - 1, 0, WIDTH - 1, HEIGHT);
         line(g2, 0, HEIGHT - 1, WIDTH, HEIGHT - 1);
-        // g.drawImage(buffer, 0, 0, null);
 
-        // int x[] = { 590, 250, 1, 450, 299, 299, 448, 48, 150, 598 };
-        // int y[] = { 200, 250, 1, 150, 299, 450, 448, 330, 510, 598 };
-// 
+        int x[] = { 590, 250, 1, 450, 299, 299, 448, 48, 150, 598 };
+        int y[] = { 200, 250, 1, 150, 299, 450, 448, 330, 510, 598 };
+
         // for (int i = 0; i < 10; i++) {
-// 
-        //     g2.setColor(randomColor[i]);
-        //     // plot(g, x[i], y[i]);
-        //     // line(g, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10]);
-        //     bezier(g2, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10], x[(i + 2) % 10],
-        //             y[(i + 2) % 10], x[(i + 3) % 10], y[(i + 3) % 10]);
+        //
+        // g2.setColor(randomColor[i]);
+        // // plot(g, x[i], y[i]);
+        // // line(g, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10]);
+        // bezier(g2, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10], x[(i + 2) % 10],
+        // y[(i + 2) % 10], x[(i + 3) % 10], y[(i + 3) % 10]);
         // }
-// 
-        buffer = floodFill(buffer, 100, 50, Color.white, Color.red);
-        // buffer = floodFill(buffer, 100, 100, Color.white, Color.blue);
+        //
+        g2.setColor(Color.PINK);
+        heart(g2, 0, 0, 30);
+
+        // circle(g2, 100, 310, 40);
+        circleMidpoint(g2, 100, 310, 40);
+
+        // buffer = floodFill(buffer, 100, 50, Color.white, Color.red);
+        // buffer = floodFill(buffer, 500, 500, Color.white, Color.blue);
 
         g.drawImage(buffer, 0, 0, null);
 
     }
 
-    public void curve(Graphics g, int x, int y, int width, int height, int sttang, int arcang) {
-        g.drawArc(x, y, width, height, sttang, arcang);
+    public void heart(Graphics g, int x, int y, int size) {
+
+        // curve(g, 2 * size, 4 * size, 2 * size, 3 * size, 4 * size, 2 * size, 4 *
+        // size, 4 * size);
+        // curve(g, 200, 200, 200, 100, 300, 150, 300, 200);
+        // curve(g, 200, 300, 200, 250, 100, 250, 100, 200);
+        // curve(g, 200, 300, 200, 250, 300, 250, 300, 200);
+
+        curve(g, x + size * 2, y + size * 4, x + size * 2, y + size * 3, x + size * 4, y + size * 3, x + size * 4,
+                y + size * 4);
+        curve(g, x + size * 4, y + size * 4, x + size * 4, y + size * 3, x + size * 6, y + size * 3, x + size * 6,
+                y + size * 4);
+        curve(g, x + size * 4, y + size * 6, x + size * 4, y + size * 5, x + size * 2, y + size * 5, x + size * 2,
+                y + size * 4);
+        curve(g, x + size * 4, y + size * 6, x + size * 4, y + size * 5, x + size * 6, y + size * 5, x + size * 6,
+                y + size * 4);
+    }
+
+    public void circleMidpoint(Graphics g, int xc, int yc, int r) {
+        int x = 0;
+        int y = r;
+        int d = 1 - r;
+
+        while (x <= y) {
+            plot(g, x + xc, y + yc, 1);
+            plot(g, -x + xc, y + yc, 1);
+            plot(g, x + xc, -y + yc, 1);
+            plot(g, -x + xc, -y + yc, 1);
+            plot(g, y + xc, x + yc, 1);
+            plot(g, -y + xc, x + yc, 1);
+            plot(g, y + xc, -x + yc, 1);
+            plot(g, -y + xc, -x + yc, 1);
+
+            x++;
+            d = d + 2 * x + 1;
+            if (d >= 0) {
+                y--;
+                d = d - 2 * y;
+            }
+        }
+    }
+
+    public void curve(Graphics g, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+        // g.drawArc(x, y, width, height, sttang, arcang);
         // drawArc(g, x, y, width, height, sttang, arcang)
+        bezier(g, x1, y1, x2, y2, x3, y3, x4, y4);
     }
 
     public void bezier(Graphics g, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
@@ -86,7 +129,6 @@ public class MyPicture extends JPanel {
         Queue<Point> q = new LinkedList<>();
 
         if (m.getRGB(x, y) == target_colour.getRGB()) {
-            System.out.println("true");
             g2.setColor(replacement_colour);
             plot(g2, x, y, 1);
             q.add(new Point(x, y));
