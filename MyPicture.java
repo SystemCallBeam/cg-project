@@ -54,9 +54,31 @@ public class MyPicture extends JPanel {
         heart(g2, 100, 100, 10);
 
         // circle(g2, 100, 310, 40);
-        midpointCircle(g2, 100, 310, 40);
+        midpointCircle(g2, 80, 70, 40);
 
-        midpointEllipse(g2, 300, 200, 80, 40);
+        star(g2, 430, 130, 7);
+
+        // curve(g2, 0, 550, 70, 510, 100, 510, 102, 500);
+        // curve(g2, 102, 500, 104, 490, 112, 490, 113, 492);
+        // curve(g2, 113, 492, 114, 495, 122, 495, 123, 492);
+        // curve(g2, 123, 492, 124, 490, 130, 490, 132, 500);
+        // curve(g2, 132, 500, 134, 510, 170, 510, 200, 535);
+
+        line(g2, 0, 370, 600, 370);
+        line(g2, 300, 0, 300, 600);
+
+        curve(g2, 0, 550, 70, 510, 170, 510, 200, 535);
+        // curve(g2, 102, 500, 161, 510, 170, 510, 200, 535);
+        curve(g2, 200, 535, 230, 560, 310, 560, 380, 510);
+        curve(g2, 380, 510, 450, 460, 550, 460, 600, 480);
+
+        int ty = 10;
+        curve(g2, 98, 510 + ty, 107, 510 + ty, 113, 492 + ty, 116, 492 + ty);
+        curve(g2, 116, 492 + ty, 119, 492 + ty, 122, 501 + ty, 125, 501 + ty);
+        curve(g2, 125, 501 + ty, 128, 501 + ty, 131, 492 + ty, 134, 492 + ty);
+        curve(g2, 134, 492 + ty, 137, 492 + ty, 143, 510 + ty, 152, 510 + ty);
+
+        curve(g2, 0, 450, 180, 430, 250, 450, 380, 510);
 
         // buffer = floodFill(buffer, 100, 50, Color.white, Color.red);
         // buffer = floodFill(buffer, 500, 500, Color.white, Color.blue);
@@ -66,7 +88,10 @@ public class MyPicture extends JPanel {
     }
 
     public void star(Graphics g, int x, int y, int size) {
-        
+        curve(g, x, y-2*size, x, y-1*size, x-1*size, y, x-2*size, y);
+        curve(g, x, y-2*size, x, y-1*size, x+1*size, y, x+2*size, y);
+        curve(g, x, y+2*size, x, y+1*size, x-1*size, y, x-2*size, y);
+        curve(g, x, y+2*size, x, y+1*size, x+1*size, y, x+2*size, y);
     }
 
     public void heart(Graphics g, int x, int y, int size) {
