@@ -11,6 +11,7 @@ public class MyPicture extends JPanel {
 
     public static Random rand = new Random();
     public static Color randomColor[] = new Color[10];
+    public static Color[] gradient;
 
     public static void main(String[] args) {
         MyPicture g = new MyPicture();
@@ -41,15 +42,13 @@ public class MyPicture extends JPanel {
         int x[] = { 590, 250, 1, 450, 299, 299, 448, 48, 150, 598 };
         int y[] = { 200, 250, 1, 150, 299, 450, 448, 330, 510, 598 };
 
-        // for (int i = 0; i < 10; i++) {
-        //
-        // g2.setColor(randomColor[i]);
-        // // plot(g, x[i], y[i]);
-        // // line(g, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10]);
-        // bezier(g2, x[i], y[i], x[(i + 1) % 10], y[(i + 1) % 10], x[(i + 2) % 10],
-        // y[(i + 2) % 10], x[(i + 3) % 10], y[(i + 3) % 10]);
-        // }
-        //
+        gradient = generateGradient(Color.BLACK, new Color(173, 216, 230), 15);
+
+        // Print the generated colors
+        for (Color color : gradient) {
+            System.out.println("RGB: " + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue());
+        }
+
         g2.setColor(Color.PINK);
         heart(g2, 100, 100, 10);
 
@@ -58,19 +57,13 @@ public class MyPicture extends JPanel {
 
         star(g2, 430, 130, 7);
 
-        // curve(g2, 0, 550, 70, 510, 100, 510, 102, 500);
-        // curve(g2, 102, 500, 104, 490, 112, 490, 113, 492);
-        // curve(g2, 113, 492, 114, 495, 122, 495, 123, 492);
-        // curve(g2, 123, 492, 124, 490, 130, 490, 132, 500);
-        // curve(g2, 132, 500, 134, 510, 170, 510, 200, 535);
-
         line(g2, 0, 370, 600, 370);
         line(g2, 300, 0, 300, 600);
 
         curve(g2, 0, 550, 70, 510, 170, 510, 200, 535);
         // curve(g2, 102, 500, 161, 510, 170, 510, 200, 535);
         curve(g2, 200, 535, 230, 560, 310, 560, 380, 510);
-        curve(g2, 380, 510, 450, 460, 550, 460, 600, 480);
+        curve(g2, 380, 510, 450, 465, 550, 465, 600, 475);
 
         int ty = 10;
         curve(g2, 98, 510 + ty, 107, 510 + ty, 113, 492 + ty, 116, 492 + ty);
@@ -87,11 +80,26 @@ public class MyPicture extends JPanel {
 
     }
 
+    public static Color[] generateGradient(Color startColor, Color endColor, int numSteps) {
+        Color[] gradient = new Color[numSteps];
+
+        for (int i = 0; i < numSteps; i++) {
+            float ratio = (float) i / (float) (numSteps - 1);
+            int red = (int) (startColor.getRed() + ratio * (endColor.getRed() - startColor.getRed()));
+            int green = (int) (startColor.getGreen() + ratio * (endColor.getGreen() - startColor.getGreen()));
+            int blue = (int) (startColor.getBlue() + ratio * (endColor.getBlue() - startColor.getBlue()));
+
+            gradient[i] = new Color(red, green, blue);
+        }
+
+        return gradient;
+    }
+
     public void star(Graphics g, int x, int y, int size) {
-        curve(g, x, y-2*size, x, y-1*size, x-1*size, y, x-2*size, y);
-        curve(g, x, y-2*size, x, y-1*size, x+1*size, y, x+2*size, y);
-        curve(g, x, y+2*size, x, y+1*size, x-1*size, y, x-2*size, y);
-        curve(g, x, y+2*size, x, y+1*size, x+1*size, y, x+2*size, y);
+        curve(g, x, y - 2 * size, x, y - 1 * size, x - 1 * size, y, x - 2 * size, y);
+        curve(g, x, y - 2 * size, x, y - 1 * size, x + 1 * size, y, x + 2 * size, y);
+        curve(g, x, y + 2 * size, x, y + 1 * size, x - 1 * size, y, x - 2 * size, y);
+        curve(g, x, y + 2 * size, x, y + 1 * size, x + 1 * size, y, x + 2 * size, y);
     }
 
     public void heart(Graphics g, int x, int y, int size) {
