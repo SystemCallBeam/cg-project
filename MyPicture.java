@@ -11,9 +11,10 @@ public class MyPicture extends JPanel {
     public static final int WIDTH = 600, HEIGHT = 600;
 
     public static Random rand = new Random();
-    // public static Color randomColor[] = new Color[10];
+    public static Color randomColor[] = new Color[10];
     public static Color[] gradient;
     public static int r[][] = new int[WIDTH][HEIGHT];
+    public static int randomXY[][];
 
     public static void main(String[] args) {
         MyPicture g = new MyPicture();
@@ -154,18 +155,26 @@ public class MyPicture extends JPanel {
             cloud(g2, 250, 100, 10);
             cloud(g2, 100, 200, 14);
             cloud(g2, 430, 290, 14);
+            cloud(g2, 500, 150, 12);
+            heart(g2, 300, 180, 19);
             floodFillAll(buffer, 250, 100, colorA);
             floodFillAll(buffer, 100, 200, colorA);
             floodFillAll(buffer, 430, 290, colorA);
+            floodFillAll(buffer, 500, 150, colorA);
+            floodFillAll(buffer, 300, 182, colorA);
 
             colorA = new Color(230, 230, 230);
             g2.setColor(colorA);
             cloud(g2, 250, 104, 7);
             cloud(g2, 100, 206, 10);
             cloud(g2, 430, 299, 10);
+            cloud(g2, 500, 156, 8);
+            heart(g2, 300, 183, 12);
             floodFillAll(buffer, 250, 100, colorA);
             floodFillAll(buffer, 100, 200, colorA);
             floodFillAll(buffer, 430, 299, colorA);
+            floodFillAll(buffer, 500, 156, colorA);
+            floodFillAll(buffer, 300, 185, colorA);
         }
 
         colorA = new Color(255, 250, 200);
@@ -221,6 +230,11 @@ public class MyPicture extends JPanel {
         bird(g2, 280, 314, 9);
         bird(g2, 255, 333, 9);
 
+        firework(g2, 110, 330, 30);
+        firework(g2, 190, 270, 60);
+        firework(g2, 320, 300, 50);
+        firework(g2, 450, 130, 80);
+
         { // ground
             int ty = 1;
             Color green_1 = new Color(50, 87, 48);
@@ -228,6 +242,7 @@ public class MyPicture extends JPanel {
             curve(g2, 0, 450, 180, 430, 250, 450, 380, 510);
             line(g2, 0, 450, 0, 550, 1);
 
+            // cat
             Color green_2 = new Color(80, 120, 45);
             g2.setColor(green_2);
             line(g2, 0, 551, 0, 600, 1);
@@ -243,6 +258,7 @@ public class MyPicture extends JPanel {
             curve(g2, 125, 501 + ty, 128, 501 + ty, 131, 492 + ty, 134, 492 + ty);
             curve(g2, 134, 492 + ty, 137, 492 + ty, 143, 510 + ty, 152, 510 + ty);
 
+            // fill color
             floodFillAll(buffer, 300, 598, green_2);
             floodFill(buffer, 115, 505, Color.white, green_2);
             plot(g2, 115, 506, 1);
@@ -250,6 +266,47 @@ public class MyPicture extends JPanel {
             g2.setColor(green_1);
             floodFill(buffer, 200, 500, Color.white, green_1);
             floodFillAll(buffer, 200, 455, green_1);
+        }
+
+        { // grass
+            g2.setColor(new Color(150, 170, 96));
+            grass(g2, 120, 445, 60);
+            grass(g2, 160, 445, 20);
+            grass(g2, 20, 450, 20);
+            grass(g2, 40, 450, 20);
+            grass(g2, 60, 450, 20);
+            grass(g2, 80, 450, 20);
+            grass(g2, 100, 450, 20);
+            grass(g2, 120, 450, 20);
+            grass(g2, 140, 450, 20);
+            grass(g2, 160, 450, 20);
+            grass(g2, 180, 450, 20);
+            grass(g2, 120, 460, 130);
+            grass(g2, 260, 470, 30);
+            grass(g2, 280, 480, 20);
+            grass(g2, 150, 470, 140);
+            grass(g2, 150, 480, 150);
+            grass(g2, 60, 490, 75);
+            grass(g2, 205, 490, 75);
+            grass(g2, 150, 500, 150);
+            grass(g2, 45, 510, 50);
+            grass(g2, 225, 510, 60);
+            grass(g2, 15, 520, 30);
+            grass(g2, 250, 520, 50);
+            grass(g2, 10, 530, 10);
+            grass(g2, 260, 530, 40);
+            grass(g2, 265, 536, 30);
+
+            g2.setColor(new Color(170, 190, 126));
+            grass(g2, 75, 520, 30);
+            grass(g2, 160, 520, 20);
+            grass(g2, 120, 535, 80);
+            grass(g2, 120, 545, 100);
+            grass(g2, 150, 550, 150);
+            grass(g2, 150, 560, 150);
+            grass(g2, 150, 570, 150);
+            grass(g2, 150, 580, 150);
+            grass(g2, 150, 590, 150);
         }
 
         g2.setColor(Color.black);
@@ -309,6 +366,48 @@ public class MyPicture extends JPanel {
         }
 
         return gradient;
+    }
+
+    public void grass(Graphics g, int x, int y, int r) {
+        grass(g, x, y, r, 1);
+    }
+
+    public void grass(Graphics g, int x, int y, int r, int size) {
+        int ry[] = new int[r];
+        int rx[] = new int[r];
+        for (int i = 0; i < r; i++) {
+            rx[i] = rand.nextInt(-r, r);
+            ry[i] = rand.nextInt(-5, 5);
+        }
+        for (int i = 0; i < r; i++) {
+            line(g, x + rx[i], y + ry[i], x + rx[i], y + 6 + ry[i], size);
+        }
+
+    }
+
+    public void firework(Graphics g, int x, int y, int r) {
+        int n = r;
+        randomXY = new int[2][n];
+        randomColor = new Color[r];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < n; j++) {
+                randomXY[i][j] = rand.nextInt(-r, r);
+            }
+        }
+
+        for (int i = 0; i < r; i++) {
+            randomColor[i] = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+        }
+
+        g.setColor(Color.white);
+        plot(g, x - r / 20, y - r / 20, r / 10);
+        for (int i = 0; i < n; i++) {
+            g.setColor(randomColor[i % r]);
+            int tx = x + randomXY[0][i], ty = y + randomXY[1][i];
+            if (randomXY[0][i] * randomXY[0][i] + randomXY[1][i] * randomXY[1][i] < r * r) {
+                plot(g, tx, ty, 4);
+            }
+        }
     }
 
     public void flower(BufferedImage m, Graphics g, int x, int y, int size) {
