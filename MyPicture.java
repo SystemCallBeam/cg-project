@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -193,6 +192,17 @@ public class MyPicture extends JPanel {
         // line(g2, 0, 380, 600, 380, 1);
         // line(g2, 300, 0, 300, 600, 1);
 
+        colorA = Color.white;
+        g2.setColor(colorA);
+        midpointEllipse(g2, 530, 360, 6, 19);
+        floodFillAll(buffer, 530, 360, colorA);
+
+        colorA = new Color(0x575e01);
+        g2.setColor(colorA);
+        curve(g2, 600, 390, 430, 380, 530, 370, 600, 360);
+        line(g2, 600 - 1, 390, 600 - 1, 360, 1);
+        floodFillAll(buffer, 590, 380, colorA);
+
         { // wave
             g2.setColor(new Color(188, 239, 248));
             wave2(g2, 80, 390, 3, 2);
@@ -225,13 +235,17 @@ public class MyPicture extends JPanel {
             line(g2, 200 + x, 405, 230 + x, 405, 2);
         }
 
+        boat1(buffer, g2, 380, 450, 13);
+        boat1(buffer, g2, 480, 420, 11);
+        boat2(buffer, g2, 390, 382, 9);
+
         g2.setColor(Color.black);
         bird(g2, 270, 300, 9);
         bird(g2, 280, 314, 9);
         bird(g2, 255, 333, 9);
 
         firework(g2, 110, 330, 30);
-        firework(g2, 190, 270, 60);
+        firework(g2, 190, 230, 60);
         firework(g2, 320, 300, 50);
         firework(g2, 450, 130, 80);
 
@@ -269,6 +283,7 @@ public class MyPicture extends JPanel {
         }
 
         { // grass
+          // left
             g2.setColor(new Color(150, 170, 96));
             grass(g2, 120, 445, 60);
             grass(g2, 160, 445, 20);
@@ -297,6 +312,25 @@ public class MyPicture extends JPanel {
             grass(g2, 260, 530, 40);
             grass(g2, 265, 536, 30);
 
+            // right
+            grass(g2, 310, 480, 5, 1);
+            grass(g2, 320, 490, 20, 1);
+            grass(g2, 330, 500, 30, 1);
+            grass(g2, 320, 510, 40, 1);
+            grass(g2, 320, 520, 20, 1);
+
+            // left
+            g2.setColor(new Color(95, 110, 56));
+            grass(g2, 120, 460, 130);
+            grass(g2, 150, 470, 140);
+            grass(g2, 150, 480, 150);
+            grass(g2, 150, 500, 150);
+
+            // right
+            grass(g2, 330, 500, 30, 1);
+            grass(g2, 320, 510, 40, 1);
+
+            // left
             g2.setColor(new Color(170, 190, 126));
             grass(g2, 75, 520, 30);
             grass(g2, 160, 520, 20);
@@ -307,12 +341,45 @@ public class MyPicture extends JPanel {
             grass(g2, 150, 570, 150);
             grass(g2, 150, 580, 150);
             grass(g2, 150, 590, 150);
+
+            // right
+            grass(g2, 450, 590, 150);
+            grass(g2, 450, 580, 150);
+            grass(g2, 450, 570, 150);
+            grass(g2, 450, 560, 150);
+            grass(g2, 450, 550, 150);
+            grass(g2, 455, 540, 140);
+            grass(g2, 475, 530, 130);
+            grass(g2, 485, 520, 120);
+            grass(g2, 495, 510, 100);
+            grass(g2, 500, 500, 90);
+            grass(g2, 510, 490, 85);
+            grass(g2, 520, 480, 75);
+
+            // left
+            g2.setColor(new Color(115, 130, 66));
+            grass(g2, 120, 545, 100);
+            grass(g2, 150, 550, 150);
+            grass(g2, 150, 560, 150);
+            grass(g2, 150, 570, 150);
+            grass(g2, 150, 580, 150);
+            grass(g2, 150, 590, 150);
+
+            // right
+            grass(g2, 450, 580, 150);
+            grass(g2, 450, 570, 150);
+            grass(g2, 450, 550, 150);
+            grass(g2, 455, 540, 140);
+            grass(g2, 485, 520, 120);
+            grass(g2, 495, 510, 100);
+            grass(g2, 510, 490, 85);
+            grass(g2, 520, 480, 75);
         }
 
         g2.setColor(Color.black);
         flower(buffer, g2, 200, 455, 5);
         flower(buffer, g2, 174, 480, 5);
-        flower(buffer, g2, 124, 492, 4);
+        flower(buffer, g2, 44, 492, 4);
         flower(buffer, g2, 134, 472, 5);
         flower(buffer, g2, 84, 482, 4);
         flower(buffer, g2, 264, 492, 6);
@@ -335,7 +402,7 @@ public class MyPicture extends JPanel {
         temp = 5;
         for (int j = 0; j < 600 / temp; j++) {
             for (int k = 0; k < 300 / temp; k++) {
-                colorA = new Color(buffer.getRGB(300 + temp * k, 0 + temp * j) - r[j][k]);
+                colorA = new Color(buffer.getRGB(300 + temp * k, 0 + temp * j));
                 g2.setColor(colorA);
                 plot(g2, 300 + temp * k, 0 + temp * j, temp);
             }
@@ -385,8 +452,25 @@ public class MyPicture extends JPanel {
 
     }
 
+    public void boat1(BufferedImage m, Graphics g, int x, int y, int size) {
+        g.setColor(new Color(0x7f4f24));
+        curve(g, x - 2 * size, y - 1 * size, x - 1 * size, y, x + 1 * size, y, x + 2 * size, y - 1 * size);
+        curve(g, x - 2 * size, y - 1 * size, x - 2 * size, y + 2 * size, x + 2 * size, y + 2 * size, x + 2 * size,
+                y - 1 * size);
+        floodFillAll(m, x, y, new Color(0x7f4f24));
+    }
+
+    public void boat2(BufferedImage m, Graphics g, int x, int y, int size) {
+        g.setColor(new Color(0xadb5bd));
+        midpointEllipse(g, x, y, 4 * size, size);
+        midpointEllipse(g, x, y, 4 * size - 1, size - 1);
+        floodFillAll(m, x, y, new Color(0xadb5bd));
+        g.setColor(Color.black);
+        line(g, x - 4 * size - 1, y - 1, x + 4 * size - 1, y - 1, 3);
+    }
+
     public void firework(Graphics g, int x, int y, int r) {
-        int n = r;
+        int n = 2 * r;
         randomXY = new int[2][n];
         randomColor = new Color[r];
         for (int i = 0; i < 2; i++) {
@@ -402,9 +486,16 @@ public class MyPicture extends JPanel {
         g.setColor(Color.white);
         plot(g, x - r / 20, y - r / 20, r / 10);
         for (int i = 0; i < n; i++) {
-            g.setColor(randomColor[i % r]);
             int tx = x + randomXY[0][i], ty = y + randomXY[1][i];
             if (randomXY[0][i] * randomXY[0][i] + randomXY[1][i] * randomXY[1][i] < r * r) {
+                plot(g, tx, ty, 4);
+                linedot(g, x, y, tx, ty, 1);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            int tx = x + randomXY[0][i], ty = y + randomXY[1][i];
+            if (randomXY[0][i] * randomXY[0][i] + randomXY[1][i] * randomXY[1][i] < r * r) {
+                g.setColor(randomColor[i % r]);
                 plot(g, tx, ty, 4);
             }
         }
@@ -647,14 +738,51 @@ public class MyPicture extends JPanel {
         return m;
     }
 
-    public void drawArc(Graphics g, int x, int y, int width, int height, int sttang, int arcang) {
-        plot(g, x, y);
-    }
-
     public void line(Graphics g, int x1, int y1, int x2, int y2, int size) {
         // g.drawLine(x1, y1, x2, y2);
         // dda(g, x1, y1, x2, y2);
         bresenham(g, x1, y1, x2, y2, size);
+    }
+
+    public void linedot(Graphics g, int x1, int y1, int x2, int y2, int size) {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+
+        int sx = (x1 < x2) ? 1 : -1;
+        int sy = (y1 < y2) ? 1 : -1;
+        boolean isSwap = false, isPlot = false;
+
+        if (dy > dx) {
+            int tmp = dx;
+            dx = dy;
+            dy = tmp;
+            isSwap = true;
+        }
+        int d = 2 * dy - dx;
+        int x = x1;
+        int y = y1;
+
+        for (int i = 0; i < dx; i++) {
+            if (isPlot) {
+                plot(g, x, y, size);
+            }
+            isPlot = rand.nextInt(2) % 2 == 0;
+
+            if (d >= 0) {
+                if (isSwap)
+                    x += sx;
+                else
+                    y += sy;
+
+                d -= 2 * dx;
+            }
+            if (isSwap)
+                y += sy;
+            else
+                x += sx;
+
+            d += 2 * dy;
+        }
     }
 
     public void plot(Graphics g, int x, int y) {
